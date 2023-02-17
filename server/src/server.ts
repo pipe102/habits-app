@@ -10,6 +10,7 @@ app.register(appRoutes);
 app
   .listen({
     port: 3333,
+    host: process.env.LOCALHOST_IP,
   })
   .then(() => {
     console.log("Server running! ✅");
