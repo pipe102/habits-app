@@ -40,7 +40,7 @@ const New = () => {
   const handleCreateHabit = async () => {
     try {
       if (!title.trim() || weekDays.length === 0) {
-        Alert.alert(
+        return Alert.alert(
           "Novo hábito",
           "Um novo hábito não pode conter uma string vazia e escolha a periodicidade"
         );
