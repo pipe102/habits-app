@@ -65,10 +65,10 @@ const New = () => {
       >
         <BackButton />
         <Text className="mt-6 text-white font-extrabold text-3xl">
-          Create Habit
+          Criar Hábito
         </Text>
         <Text className="mt-6 text-white font-semibold text-base">
-          What's your commitment?
+          Qual é o teu comprometimento?
         </Text>
         <TextInput
           className="h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 border-zinc-800 focus:border-green-600"
@@ -78,7 +78,7 @@ const New = () => {
           value={title}
         />
         <Text className="font-semibold mt-4 mb-3 text-white text-base">
-          What's the recurrence?
+          Qual a recorrência?
         </Text>
         {availableWeekDays.map((weekDay, index) => (
           <Checkbox
@@ -95,7 +95,7 @@ const New = () => {
         >
           <Feather name="check" size={20} color={colors.white} />
           <Text className="font-semibold text-base text-white ml-2">
-            Confirm
+            Confirmar
           </Text>
         </TouchableOpacity>
       </ScrollView>

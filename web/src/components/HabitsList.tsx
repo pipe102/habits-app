@@ -23,16 +23,21 @@ interface HabitsInfo {
 const HabitsList = ({ date, onCompletedChange }: HabitsListProps) => {
   const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>();
 
-  useEffect(() => {
-    api
-      .get("day", {
+  const getDayInfo = async () => {
+    try {
+      let response = await api.get("day", {
         params: {
           date: date.toISOString(),
         },
-      })
-      .then((response) => {
-        setHabitsInfo(response.data);
       });
+      setHabitsInfo(response.data);
+    } catch (error) {
+      console.error(`ERROR: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getDayInfo();
   }, []);
 
   const handleToggleHabit = async (habitId: string) => {

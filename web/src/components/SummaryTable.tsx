@@ -21,10 +21,17 @@ type Summary = {
 const SummaryTable = () => {
   const [summary, setSummary] = useState<Summary>([]);
 
-  useEffect(() => {
-    api.get("summary").then((response) => {
+  const getSummaryInfo = async () => {
+    try {
+      let response = await api.get("summary");
       setSummary(response.data);
-    });
+    } catch (error) {
+      console.error(`ERROR: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getSummaryInfo();
   }, []);
 
   return (
