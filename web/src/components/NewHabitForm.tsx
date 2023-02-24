@@ -13,12 +13,17 @@ const availableWeekDays = [
   "Sábado",
 ];
 
-const NewHabitForm = () => {
+interface NewHabitFormProps {
+  setNewHabitCreated: (value: boolean) => void;
+}
+
+const NewHabitForm = ({ setNewHabitCreated }: NewHabitFormProps) => {
   const [title, setTitle] = useState("");
   const [weekDays, setWeekDays] = useState<number[]>([]);
 
   const createNewHabit = async (event: FormEvent) => {
     event.preventDefault();
+    setNewHabitCreated(false);
 
     if (!title || weekDays.length === 0) {
       return;
@@ -29,6 +34,7 @@ const NewHabitForm = () => {
       weekDays,
     });
 
+    setNewHabitCreated(true);
     setTitle("");
     setWeekDays([]);
 

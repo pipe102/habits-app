@@ -3,7 +3,11 @@ import * as Dialog from "@radix-ui/react-dialog";
 import logoImage from "../assets/logo.svg";
 import NewHabitForm from "./NewHabitForm";
 
-const Header = () => {
+interface HeaderProps {
+  setNewHabitCreated: (value: boolean) => void;
+}
+
+const Header = ({ setNewHabitCreated }: HeaderProps) => {
   return (
     <div className="w-full m-w-3xl mx-auto flex items-center justify-between">
       <img src={logoImage} alt="Habits" />
@@ -25,7 +29,7 @@ const Header = () => {
             <Dialog.Title className="text-3xl leading-tight text-white font-extrabold">
               Criar Hábitos
             </Dialog.Title>
-            <NewHabitForm />
+            <NewHabitForm setNewHabitCreated={setNewHabitCreated} />
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>

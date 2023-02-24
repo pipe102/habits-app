@@ -11,6 +11,10 @@ const summaryDates = generateDatesFromYearBeginning();
 const minimumSummaryDatesSize = 18 * 7;
 const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length;
 
+interface SummaryTableProps {
+  newHabitCreated: boolean;
+}
+
 type Summary = {
   id: string;
   date: string;
@@ -18,7 +22,7 @@ type Summary = {
   completed: number;
 }[];
 
-const SummaryTable = () => {
+const SummaryTable = ({ newHabitCreated }: SummaryTableProps) => {
   const [summary, setSummary] = useState<Summary>([]);
 
   const getSummaryInfo = async () => {
@@ -32,7 +36,7 @@ const SummaryTable = () => {
 
   useEffect(() => {
     getSummaryInfo();
-  }, []);
+  }, [newHabitCreated]);
 
   return (
     <div className="w-full flex">
