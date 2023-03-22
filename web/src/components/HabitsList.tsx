@@ -25,7 +25,7 @@ const HabitsList = ({ date, onCompletedChange }: HabitsListProps) => {
 
   const getDayInfo = async () => {
     try {
-      let response = await api.get("day", {
+      let response = await api.get("/api/habits/day", {
         params: {
           date: date.toISOString(),
         },
@@ -44,7 +44,7 @@ const HabitsList = ({ date, onCompletedChange }: HabitsListProps) => {
     const isHabitAlreadyCompleted =
       habitsInfo!.completedHabits.includes(habitId);
 
-    await api.patch(`habits/${habitId}/toggle`);
+    await api.patch(`api/habits/${habitId}/toggle`);
 
     let completedHabits: string[] = [];
 

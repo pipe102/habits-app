@@ -29,7 +29,7 @@ const NewHabitForm = ({ setNewHabitCreated }: NewHabitFormProps) => {
       return;
     }
 
-    await api.post("habits", {
+    await api.post("/api/habits", {
       title,
       weekDays,
     });

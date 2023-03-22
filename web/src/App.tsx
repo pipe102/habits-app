@@ -3,6 +3,7 @@ import SummaryTable from "./components/SummaryTable";
 import "./styles/global.css";
 import "./lib/dayjs";
 import { useState } from "react";
+import Login from "./components/Login";
 
 //import Habit from "./components/Habit";
 
@@ -15,6 +16,7 @@ function App() {
         <Header setNewHabitCreated={setNewHabitCreated} />
         <SummaryTable newHabitCreated={newHabitCreated} />
       </div>
+      {/* <Login /> */}
     </div>
   );
 }

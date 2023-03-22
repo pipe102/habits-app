@@ -27,7 +27,7 @@ const SummaryTable = ({ newHabitCreated }: SummaryTableProps) => {
 
   const getSummaryInfo = async () => {
     try {
-      let response = await api.get("summary");
+      let response = await api.get("/api/habits/summary");
       setSummary(response.data);
     } catch (error) {
       console.error(`ERROR: ${error}`);
