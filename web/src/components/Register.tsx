@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { api } from "../lib/axios";
 
 interface RegisterProps {
   setWannaRegister: (value: boolean) => void;
@@ -9,11 +10,27 @@ const Register = ({ setWannaRegister }: RegisterProps) => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Name:", name);
-    console.log("Password:", password);
+
+    if (!email || !name || !password) {
+      console.log("Aqui");
+      return;
+    }
+
+    await api.post("/api/users", {
+      email,
+      name,
+      password,
+    });
+
+    setEmail("");
+    setName("");
+    setPassword("");
+
+    setWannaRegister(false);
+
+    alert("Utilizador registado com sucesso!");
   };
 
   return (

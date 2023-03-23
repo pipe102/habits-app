@@ -38,7 +38,7 @@ const NewHabitForm = ({ setNewHabitCreated }: NewHabitFormProps) => {
     setTitle("");
     setWeekDays([]);
 
-    alert("Habit created successfully");
+    alert("Habito criado com sucesso!");
   };
 
   const handleToggleWeekDay = (weekDay: number) => {

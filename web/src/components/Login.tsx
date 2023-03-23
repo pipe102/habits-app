@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { api } from "../lib/axios";
 
 interface LoginProps {
   setWannaRegister: (value: boolean) => void;
@@ -9,10 +10,28 @@ const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+
+    if (!email || !password) {
+      return;
+    }
+
+    const response = await api.post("/api/users/login", {
+      email,
+      password,
+    });
+
+    const { accessToken } = response.data;
+
+    if (accessToken) {
+      setEmail("");
+      setPassword("");
+
+      setIsLoggedIn(true);
+
+      alert("Inicio de sessão realizado com sucesso!");
+    }
   };
 
   return (
@@ -58,7 +77,6 @@ const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
         Login
       </button>
       <button
-        type="submit"
         className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-violet-600 hover:bg-violet-500 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 focus:ring-offset-zinc-900"
         onClick={() => setWannaRegister(true)}
       >
