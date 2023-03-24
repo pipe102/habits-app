@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { api } from "../lib/axios";
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning";
 import HabitDay from "./HabitDay";
+import { useAuthHeader } from "react-auth-kit";
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
 
@@ -24,10 +25,16 @@ type Summary = {
 
 const SummaryTable = ({ newHabitCreated }: SummaryTableProps) => {
   const [summary, setSummary] = useState<Summary>([]);
+  const authHeader = useAuthHeader();
+  const token = authHeader();
 
   const getSummaryInfo = async () => {
     try {
-      let response = await api.get("/api/habits/summary");
+      let response = await api.get("/api/habits/summary", {
+        headers: {
+          Authorization: token,
+        },
+      });
       setSummary(response.data);
     } catch (error) {
       console.error(`ERROR: ${error}`);

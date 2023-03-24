@@ -1,14 +1,17 @@
 import { FormEvent, useState } from "react";
 import { api } from "../lib/axios";
+import { X, SignIn } from "phosphor-react";
+import { useSignIn } from "react-auth-kit";
 
 interface LoginProps {
   setWannaRegister: (value: boolean) => void;
-  setIsLoggedIn: (value: boolean) => void;
 }
 
-const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
+const Login = ({ setWannaRegister }: LoginProps) => {
+  const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const signIn = useSignIn();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -17,20 +20,25 @@ const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
       return;
     }
 
-    const response = await api.post("/api/users/login", {
-      email,
-      password,
-    });
+    try {
+      const response = await api.post("/api/users/login", {
+        email,
+        password,
+      });
 
-    const { accessToken } = response.data;
+      signIn({
+        token: response.data.accessToken,
+        expiresIn: 3600,
+        tokenType: "Bearer",
+        authState: { email },
+      });
 
-    if (accessToken) {
       setEmail("");
       setPassword("");
 
-      setIsLoggedIn(true);
-
       alert("Inicio de sessão realizado com sucesso!");
+    } catch (error) {
+      setErrorMessage("Email ou password erradas! Tente de novo...");
     }
   };
 
@@ -42,6 +50,20 @@ const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-10">Login</h1>
       </div>
+      {errorMessage && (
+        <div
+          className="bg-red-800 text-white px-4 py-3 rounded relative mt-4 mb-3 flex items-center"
+          role="alert"
+        >
+          <span className="block sm:inline mr-10">{errorMessage}</span>
+          <button
+            onClick={() => setErrorMessage("")}
+            className="absolute top-1/2 transform -translate-y-1/2 right-0 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 rounded-md text-white font-bold"
+          >
+            <X />
+          </button>
+        </div>
+      )}
       <label htmlFor="email" className="font-semibold leading-tight">
         Email
       </label>
@@ -67,21 +89,29 @@ const Login = ({ setWannaRegister, setIsLoggedIn }: LoginProps) => {
         onChange={(event) => setPassword(event.target.value)}
       />
       <div className="text-right mt-2">
-        <label className="leading-tight">Forgot password?</label>
+        <label className="leading-tight hover:cursor-pointer">
+          Forgot password?
+        </label>
       </div>
 
       <button
         type="submit"
         className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-green-600 hover:bg-green-500 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-zinc-900"
       >
+        <SignIn size={20} />
         Login
       </button>
-      <button
-        className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-violet-600 hover:bg-violet-500 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2 focus:ring-offset-zinc-900"
-        onClick={() => setWannaRegister(true)}
-      >
-        Register
-      </button>
+      <div className="text-center mt-4 flex items-center justify-center">
+        <label className="leading-tight inline-block">
+          Ainda não tem conta?{" "}
+        </label>
+        <p
+          className="text-blue-300 hover:cursor-pointer inline-block ml-1"
+          onClick={() => setWannaRegister(true)}
+        >
+          Criar Conta
+        </p>
+      </div>
     </form>
   );
 };

@@ -3,6 +3,7 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "phosphor-react";
 import { api } from "../lib/axios";
 import dayjs from "dayjs";
+import { useAuthHeader } from "react-auth-kit";
 
 interface HabitsListProps {
   date: Date;
@@ -22,12 +23,17 @@ interface HabitsInfo {
 
 const HabitsList = ({ date, onCompletedChange }: HabitsListProps) => {
   const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>();
+  const authHeader = useAuthHeader();
+  const token = authHeader();
 
   const getDayInfo = async () => {
     try {
       let response = await api.get("/api/habits/day", {
         params: {
           date: date.toISOString(),
+        },
+        headers: {
+          Authorization: token,
         },
       });
       setHabitsInfo(response.data);
@@ -44,7 +50,19 @@ const HabitsList = ({ date, onCompletedChange }: HabitsListProps) => {
     const isHabitAlreadyCompleted =
       habitsInfo!.completedHabits.includes(habitId);
 
-    await api.patch(`api/habits/${habitId}/toggle`);
+    try {
+      await api.patch(
+        `api/habits/${habitId}/toggle`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     let completedHabits: string[] = [];
 

@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "phosphor-react";
 import { api } from "../lib/axios";
+import { useAuthHeader } from "react-auth-kit";
 
 const availableWeekDays = [
   "Domingo",
@@ -20,6 +21,8 @@ interface NewHabitFormProps {
 const NewHabitForm = ({ setNewHabitCreated }: NewHabitFormProps) => {
   const [title, setTitle] = useState("");
   const [weekDays, setWeekDays] = useState<number[]>([]);
+  const authHeader = useAuthHeader();
+  const token = authHeader();
 
   const createNewHabit = async (event: FormEvent) => {
     event.preventDefault();
@@ -29,10 +32,18 @@ const NewHabitForm = ({ setNewHabitCreated }: NewHabitFormProps) => {
       return;
     }
 
-    await api.post("/api/habits", {
-      title,
-      weekDays,
-    });
+    await api.post(
+      "/api/habits",
+      {
+        title,
+        weekDays,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
     setNewHabitCreated(true);
     setTitle("");

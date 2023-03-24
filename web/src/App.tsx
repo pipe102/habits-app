@@ -5,26 +5,27 @@ import "./lib/dayjs";
 import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import { useIsAuthenticated } from "react-auth-kit";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [newHabitCreated, setNewHabitCreated] = useState(false);
   const [wannaRegister, setWannaRegister] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isAuthenticated = useIsAuthenticated();
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      {isLoggedIn && (
+      {isAuthenticated() && (
         <div className="w-full max-w-5xl px-6 flex flex-col gap-16">
           <Header setNewHabitCreated={setNewHabitCreated} />
           <SummaryTable newHabitCreated={newHabitCreated} />
         </div>
       )}
-      {wannaRegister && <Register setWannaRegister={setWannaRegister} />}
-      {!wannaRegister && !isLoggedIn && (
-        <Login
-          setWannaRegister={setWannaRegister}
-          setIsLoggedIn={setIsLoggedIn}
-        />
+      {!isAuthenticated() && wannaRegister && (
+        <Register setWannaRegister={setWannaRegister} />
+      )}
+      {!isAuthenticated() && !wannaRegister && (
+        <Login setWannaRegister={setWannaRegister} />
       )}
     </div>
   );
