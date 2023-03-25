@@ -17,6 +17,8 @@ async function habitsRoutes(app: FastifyInstance) {
         response: {
           201: $ref("createHabitResponseSchema"),
         },
+        tags: ["Habit"],
+        security: [{ bearerAuth: ["read:protected-data"] }],
       },
     },
     createHabitHandler
@@ -31,6 +33,8 @@ async function habitsRoutes(app: FastifyInstance) {
         response: {
           200: $ref("habitDayResponseSchema"),
         },
+        tags: ["Habit"],
+        security: [{ bearerAuth: ["read:protected-data"] }],
       },
     },
     habitDayHandler
@@ -42,6 +46,8 @@ async function habitsRoutes(app: FastifyInstance) {
       preHandler: [app.authenticate],
       schema: {
         params: $ref("toggleHabitSchema"),
+        tags: ["Habit"],
+        security: [{ bearerAuth: ["read:protected-data"] }],
       },
     },
     toggleHabitHandler
@@ -55,6 +61,8 @@ async function habitsRoutes(app: FastifyInstance) {
         response: {
           200: $ref("summaryResponseSchema"),
         },
+        tags: ["Habit"],
+        security: [{ bearerAuth: ["read:protected-data"] }],
       },
     },
     summaryHandler

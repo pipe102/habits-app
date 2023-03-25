@@ -5,6 +5,12 @@ import { CreateUserInput } from "./user.schema";
 export async function createUser(input: CreateUserInput) {
   const { password, ...rest } = input;
 
+  const userExists = await findUserByEmail(rest.email);
+
+  if (userExists) {
+    return null;
+  }
+
   const { hash, salt } = hashPassword(password);
 
   const user = await prisma.user.create({

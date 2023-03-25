@@ -16,6 +16,12 @@ export async function registerUserHandler(
   try {
     const user = await createUser(body);
 
+    if (!user) {
+      return reply.code(409).send({
+        message: "User already exists",
+      });
+    }
+
     return reply.code(201).send(user);
   } catch (error) {
     console.log(error);
