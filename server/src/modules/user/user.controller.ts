@@ -54,7 +54,9 @@ export async function loginHandler(
   if (correctPassword) {
     const { password, salt, ...rest } = user;
 
-    return { accessToken: app.jwt.sign(rest) };
+    return reply.code(200).send({
+      accessToken: app.jwt.sign(rest),
+    });
   }
 
   return reply.code(401).send({
@@ -62,8 +64,15 @@ export async function loginHandler(
   });
 }
 
-export async function getUsersHandler() {
-  const users = await findUsers();
+export async function getUsersHandler(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const users = await findUsers();
 
-  return users;
+    return reply.code(200).send(users);
+  } catch (error) {
+    return reply.code(500).send(error);
+  }
 }

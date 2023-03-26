@@ -16,6 +16,9 @@ async function habitsRoutes(app: FastifyInstance) {
         body: $ref("createHabitSchema"),
         response: {
           201: $ref("createHabitResponseSchema"),
+          400: $ref("errorResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
         },
         tags: ["Habit"],
         security: [{ bearerAuth: ["read:protected-data"] }],
@@ -32,6 +35,10 @@ async function habitsRoutes(app: FastifyInstance) {
         querystring: $ref("habitDaySchema"),
         response: {
           200: $ref("habitDayResponseSchema"),
+          400: $ref("errorResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          403: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
         },
         tags: ["Habit"],
         security: [{ bearerAuth: ["read:protected-data"] }],
@@ -46,6 +53,11 @@ async function habitsRoutes(app: FastifyInstance) {
       preHandler: [app.authenticate],
       schema: {
         params: $ref("toggleHabitSchema"),
+        response: {
+          400: $ref("errorResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
+        },
         tags: ["Habit"],
         security: [{ bearerAuth: ["read:protected-data"] }],
       },
@@ -60,6 +72,8 @@ async function habitsRoutes(app: FastifyInstance) {
       schema: {
         response: {
           200: $ref("summaryResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
         },
         tags: ["Habit"],
         security: [{ bearerAuth: ["read:protected-data"] }],

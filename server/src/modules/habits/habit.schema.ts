@@ -42,6 +42,16 @@ const summaryResponseSchema = z.array(
   })
 );
 
+const errorResponseSchema = z.object({
+  statusCode: z.number(),
+  error: z.string(),
+  message: z.string(),
+});
+
+const unauthorizedResponseSchema = z.object({
+  message: z.string(),
+});
+
 export type CreateHabitInput = z.infer<typeof createHabitSchema>;
 export type HabitDayInput = z.infer<typeof habitDaySchema>;
 export type ToggleHabitInput = z.infer<typeof toggleHabitSchema>;
@@ -54,6 +64,8 @@ export const { schemas: habitSchemas, $ref } = buildJsonSchemas(
     habitDayResponseSchema,
     toggleHabitSchema,
     summaryResponseSchema,
+    errorResponseSchema,
+    unauthorizedResponseSchema,
   },
   { $id: "HabitSchema" }
 );

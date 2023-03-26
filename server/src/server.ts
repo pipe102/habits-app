@@ -41,6 +41,13 @@ const main = async () => {
     "authenticate",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
+        if (!request.headers.authorization) {
+          return reply.code(401).send({
+            message:
+              "Unauthorized: Access is denied due to invalid credentials.",
+          });
+        }
+
         await request.jwtVerify();
       } catch (error) {
         return reply.send(error);

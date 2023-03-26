@@ -38,6 +38,24 @@ const loginResponseSchema = z.object({
   accessToken: z.string(),
 });
 
+const getUsersResponseSchema = z.array(
+  z.object({
+    email: z.string().email(),
+    name: z.string(),
+    id: z.number(),
+  })
+);
+
+const errorResponseSchema = z.object({
+  statusCode: z.number(),
+  error: z.string(),
+  message: z.string(),
+});
+
+const unauthorizedResponseSchema = z.object({
+  message: z.string(),
+});
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 
@@ -47,6 +65,9 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas(
     createUserResponseSchema,
     loginSchema,
     loginResponseSchema,
+    getUsersResponseSchema,
+    errorResponseSchema,
+    unauthorizedResponseSchema,
   },
   { $id: "UserSchema" }
 );

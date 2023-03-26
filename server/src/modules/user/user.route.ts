@@ -14,6 +14,9 @@ async function userRoutes(app: FastifyInstance) {
         body: $ref("createUserSchema"),
         response: {
           201: $ref("createUserResponseSchema"),
+          400: $ref("errorResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
         },
         tags: ["User"],
       },
@@ -28,6 +31,8 @@ async function userRoutes(app: FastifyInstance) {
         body: $ref("loginSchema"),
         response: {
           200: $ref("loginResponseSchema"),
+          400: $ref("errorResponseSchema"),
+          500: $ref("errorResponseSchema"),
         },
         tags: ["User"],
       },
@@ -40,6 +45,11 @@ async function userRoutes(app: FastifyInstance) {
     {
       preHandler: [app.authenticate],
       schema: {
+        response: {
+          200: $ref("getUsersResponseSchema"),
+          401: $ref("unauthorizedResponseSchema"),
+          500: $ref("errorResponseSchema"),
+        },
         tags: ["User"],
         security: [{ bearerAuth: ["read:protected-data"] }],
       },

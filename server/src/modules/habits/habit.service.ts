@@ -85,6 +85,14 @@ export async function toggleHabit(
   }
 }
 
+export async function findHabitUserById(id: string) {
+  return prisma.habit.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export async function getHabitsDay(input: HabitDayInput & { userId: number }) {
   const { date } = input;
 
@@ -129,7 +137,8 @@ export async function getHabitsDay(input: HabitDayInput & { userId: number }) {
 }
 
 export async function getSummary(userId: number) {
-  return prisma.$queryRaw`
+  try {
+    return prisma.$queryRaw`
       SELECT D.id, D.date ,
         (
           SELECT cast(count(*) as float)
@@ -147,4 +156,7 @@ export async function getSummary(userId: number) {
       FROM days D
       WHERE D.userId = ${userId}
      `;
+  } catch (error) {
+    console.log(error);
+  }
 }
