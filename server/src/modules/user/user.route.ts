@@ -3,6 +3,7 @@ import {
   loginHandler,
   registerUserHandler,
   getUsersHandler,
+  validateUserHandler,
 } from "./user.controller";
 import { $ref } from "./user.schema";
 
@@ -15,13 +16,29 @@ async function userRoutes(app: FastifyInstance) {
         response: {
           201: $ref("createUserResponseSchema"),
           400: $ref("errorResponseSchema"),
-          401: $ref("unauthorizedResponseSchema"),
+          401: $ref("messageResponseSchema"),
           500: $ref("errorResponseSchema"),
         },
         tags: ["User"],
       },
     },
     registerUserHandler
+  );
+
+  app.patch(
+    "/confirm/:email",
+    {
+      schema: {
+        params: $ref("validateUserSchema"),
+        response: {
+          200: $ref("messageResponseSchema"),
+          400: $ref("messageResponseSchema"),
+          500: $ref("errorResponseSchema"),
+        },
+        tags: ["User"],
+      },
+    },
+    validateUserHandler
   );
 
   app.post(
@@ -47,7 +64,7 @@ async function userRoutes(app: FastifyInstance) {
       schema: {
         response: {
           200: $ref("getUsersResponseSchema"),
-          401: $ref("unauthorizedResponseSchema"),
+          401: $ref("messageResponseSchema"),
           500: $ref("errorResponseSchema"),
         },
         tags: ["User"],
